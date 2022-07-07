@@ -27,6 +27,42 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <header>
+        <nav id="gnb">
+            <div class="user_info">
+                <c:if test="${user == null}">
+                    <a href="/account/login">로그인</a>
+                    <a href="/account/join">회원가입</a>
+                </c:if>
+                <c:if test="${user != null}">
+                    <div class="pf_img" style="background-image:url('${user.ai_profile_name}');"></div>
+                    <a href="/account/detail?member_no=${user.ai_seq}">
+                        <c:if test="${user.ai_nickname == null}">
+                            ${user.ai_name}
+                        </c:if>
+                        <c:if test="${user.ai_nickname != null}">
+                            ${user.ai_nickname}
+                        </c:if>
+                        (${user.ai_id})
+                    </a>
+                    <a href="/account/logout">로그아웃</a>
+                </c:if>
+            </div>
+            <ul>
+                <li>
+                    <a href="/">영화 홈</a>
+                </li>
+                <li>
+                    <a href="/score">평점·리뷰</a>
+                </li>
+                <li>
+                    <a href="/user/review">리뷰관리</a>
+                </li>
+                <li>
+                    <a href="/user/comment">댓글·평점 관리</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
 </body>
 </html>
