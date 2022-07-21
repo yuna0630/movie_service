@@ -4,19 +4,31 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.greenart.movie_service.data.AccountInfoVO;
 import com.greenart.movie_service.data.MovieCastingInfoVO;
 import com.greenart.movie_service.data.MovieInfoVO;
 import com.greenart.movie_service.data.MovieStoryInfoVO;
+import com.greenart.movie_service.mapper.HistoryMapper;
 import com.greenart.movie_service.mapper.MovieMapper;
 
 @Service
 public class MovieService {
     @Autowired MovieMapper movie_mapper;
-    public Map<String,Object> getMovieInfoAll(Integer seq) {
+    @Autowired HistoryMapper history_mapper;
+    public Map<String,Object> getMovieInfoAll(Integer seq, HttpSession session) {
         Map<String,Object> resultMap = new LinkedHashMap<String,Object>();
+        Double score = movie_mapper.selectMovieAvgScore(seq);
+        resultMap.put("score", score);
+        AccountInfoVO user = (AccountInfoVO)session.getAttribute("user");
+        if(user != null) {
+            history_mapper.insertMovieLookupHistory(seq, user.getAi_seq());
+            resultMap.put("user_comment", movie_mapper.selectMovieCommentByAccount(user.getAi_seq(), seq));
+        }
 
         MovieInfoVO movie_info = movie_mapper.selectMovieInfoBySeq(seq);
         movie_info.setPoster_img("/images/movie/"+movie_info.getPoster_img());
@@ -29,7 +41,7 @@ public class MovieService {
         }
         List<MovieCastingInfoVO> casting_list = movie_mapper.selectMovieCastingInfoBySeq(seq);
         for(MovieCastingInfoVO data : casting_list) {
-                data.setCap_file_name("/images/actor/"+data.getCap_file_name());
+            data.setCap_file_name("/images/actor/"+data.getCap_file_name());
         }
 
         List<String> img_list = movie_mapper.selectMovieImagesBySeq(seq);

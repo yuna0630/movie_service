@@ -2,7 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.greenart.movie_service.mapper.AccountMapper">
-   
+    <select id="isDuplicatedId" resultType="java.lang.Boolean">
+        select count(*) from account_info where ai_id = #{id}
+    </select> 
+    <insert id="insertAccountInfo">
+        INSERT INTO account_info
+        (ai_id, ai_pwd, ai_name, ai_nickname, ai_birth, ai_gen, ai_profile_img)
+        VALUES
+        (#{ai_id}, #{ai_pwd}, #{ai_name}, #{ai_nickname}, #{ai_birth}, #{ai_gen}, #{ai_profile_img})
+    </insert>
+    <select id="login" resultType="com.greenart.movie_service.data.AccountInfoVO">
+        select ai_seq, ai_id, ai_pwd, ai_name, ai_nickname, ai_profile_img, ai_status from account_info
+        where ai_id = #{ai_id} and ai_pwd = #{ai_pwd}
+    </select> 
+    <select id="selectCommentsByAccountSeq" resultType="com.greenart.movie_service.data.CommentDetailInfoVO">
+        select * from  comment_detail_info_view
+        where mc_ai_seq = #{seq}
+        limit 10 offset #{offset}
+    </select> 
+    <select id="selectCommentsPageCountByAccountSeq" resultType="java.lang.Integer">
+        select ceil(count(*)/10) from comment_detail_info_view where mc_ai_seq = #{seq}
+    </select> 
+    <select id="selectCommentsCountByAccountSeq" resultType="java.lang.Integer">
+        select count(*) from comment_detail_info_view where mc_ai_seq = #{seq}
+    </select> 
 </mapper>
 
 <!--

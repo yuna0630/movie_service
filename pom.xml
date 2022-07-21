@@ -15,7 +15,7 @@
 	<name>movie_service</name>
 	<description>영화 사용자 웹 서비스</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

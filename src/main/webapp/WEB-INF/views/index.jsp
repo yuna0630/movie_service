@@ -13,6 +13,14 @@
 </head>
 <body>
     <main>
+        <div class="movie_search">
+            <form action="/">
+                <input type="text" name="keyword" value="${keyword}">
+                <button>
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
         <section class="movie_list_section">
             <div class="tab_btn_area">
                 <button class="tab_button on">현재 상영작</button>
@@ -22,7 +30,7 @@
             <div class="movie_list_area">
                 <div class="movieList openList on">
                     <c:forEach items="${showingList}" var="item">
-                        <a href="/movie/detail?movie_no=${item.mi_seq}" class="movie_item open_list_item">
+                        <a href="/movie/detail?movie_no=${item.mi_seq}" target="_blank" class="movie_item open_list_item">
                             <div class="poster" style="background-image: url('/images/movie/${item.mimg_file_name}');">
                                 <div class="age_grade grade${item.mi_viewing_age}">
                                     <c:if test="${item.mi_viewing_age == 0}">전체</c:if>
